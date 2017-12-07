@@ -23,10 +23,10 @@ import {Keg} from './keg.model';
       <button (click)="editButtonHasBeenClicked(currentKeg)">Edit</button>
       <br>
       <br>
-      <input type="radio" [(ngModel)]="beerSize" [value]="1">Pint<br>
-      <input type="radio" [(ngModel)]="beerSize" [value]="2">Growler<br>
-      <input type="radio" [(ngModel)]="beerSize" [value]="4">Large Growler<br>
-      <button *ngIf="currentKeg.pintsLevel > 16" (click)="sellPint(currentKeg, beerSize)">Sell</button>
+      <input type="radio" (change)="beerSize = 1" [name]="currentKeg.name">Pint<br>
+      <input type="radio" (change)="beerSize = 2" [name]="currentKeg.name">Growler<br>
+      <input type="radio" (change)="beerSize = 4" [name]="currentKeg.name">Large Growler<br>
+      <button *ngIf="currentKeg.pintsLevel > 16" (click)="sellButtonHasBeenClicked(currentKeg, beerSize)">Sell</button>
       <br>
       <br>
       <button (click)="removeKegButtonHasBeenClicked(currentKeg)">Remove</button>
@@ -42,9 +42,14 @@ export class KegListComponent {
   @Output() editSender = new EventEmitter();
   @Output() userSender = new EventEmitter();
   @Output() removeSender = new EventEmitter();
+  @Output() sellSender = new EventEmitter();
 
   filterByStyle: string = "All Beers";
 
+
+  setBeerSize(size: number){
+    console.log(size);
+  }
   onChange(optionFromMenu){
     this.filterByStyle = optionFromMenu;
   }
@@ -57,6 +62,11 @@ export class KegListComponent {
   }
   removeKegButtonHasBeenClicked(kegToRemove: Keg){
     this.removeSender.emit(kegToRemove);
+  }
+
+  sellButtonHasBeenClicked(currentKeg, beerSize) {
+    let sellKegDetails: { soldKeg : Keg, soldSize: number} = { soldKeg : currentKeg, soldSize: beerSize};
+    this.sellSender.emit(sellKegDetails);
   }
 
   levelColor(currentKeg){

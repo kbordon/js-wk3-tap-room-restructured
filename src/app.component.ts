@@ -4,7 +4,7 @@ import {Keg} from './keg.model';
 @Component({
   selector: 'app-root',
   template: `
-  <keg-list [childKegList]="masterKegList" (editSender)="editKeg($event)" [childTaproomEmployee]="tapRoomEmployee" (userSender)="changeUser()" (removeSender)="removeKeg($event)"></keg-list>
+  <keg-list [childKegList]="masterKegList" (editSender)="editKeg($event)" [childTaproomEmployee]="tapRoomEmployee" (userSender)="changeUser()" (removeSender)="removeKeg($event)" (sellSender)="sellPint($event)"></keg-list>
   <new-keg [childTapRoomEmployee]="tapRoomEmployee" (newKegSender)="addKeg($event)"></new-keg>
   <edit-keg [childSelectedKeg]="selectedKeg" (doneSender)="finishEdit()"></edit-keg>
   `
@@ -43,8 +43,8 @@ export class AppComponent {
     }
   }
 
-  sellPint(clickedKeg,beerSize){
-    if (clickedKeg.changeLevel(beerSize) === false){
+  sellPint(childSellKegDetails){
+    if (childSellKegDetails.soldKeg.changeLevel(childSellKegDetails.soldSize) === false){
       alert("You need to refill this.");
       // change this because you might not necessarily need to refill so much as change the selling size.
     }
